@@ -1,0 +1,55 @@
+# Tên quy trình: Deploy Website AIO-D2VN
+name: Deploy Website AIO-D2VN
+
+# Chạy mỗi khi đẩy code lên nhánh 'main'
+on:
+  push:
+    branches: [ "main" ]
+
+# Cấp quyền cho quy trình
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Các công việc cần làm
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Lấy mã nguồn về
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Cài đặt Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3. Cài đặt các thư viện (npm)
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Xây dựng website (vite build)
+      - name: Build
+        run: npm run build
+
+      # 5. Cấu hình cho GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 6. Tải lên các file từ thư mục 'dist'
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Thư mục để tải lên
+          path: './dist'
+
+      # 7. Deploy!
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
