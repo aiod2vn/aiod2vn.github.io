@@ -5,10 +5,9 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // DÒNG QUAN TRỌNG ĐƯỢC THÊM VÀO ĐỂ DEPLOY
-  base: '/aiod2vn.github.io/',
+  // SỬA LẠI BASE CHO ĐÚNG
+  base: '/',
 
-  // CÁC CẤU HÌNH CŨ CỦA BẠN ĐƯỢC GIỮ NGUYÊN
   server: {
     host: "::",
     port: 8080,
