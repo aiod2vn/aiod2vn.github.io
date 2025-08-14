@@ -2,33 +2,32 @@ name: Deploy to gh-pages
 
 on:
   push:
-    branches: [ "main" ] # Chỉ chạy khi có code mới ở nhánh main
+    branches: [ "main" ]
+
+# ---- BƯỚC SỬA LỖI: CẤP QUYỀN GHI CHO WORKFLOW ----
+permissions:
+  contents: write
+# ----------------------------------------------------
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      # Bước 1: Lấy mã nguồn về
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Bước 2: Cài đặt Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      # Bước 3: Cài đặt thư viện và build website
       - name: Install and Build
         run: |
           npm install
           npm run build
 
-      # Bước 4: Dùng "Người Giao Hàng" chuyên nghiệp để đẩy thư mục 'dist' sang nhánh 'gh-pages'
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          # Token để cấp quyền cho action này được đẩy code lên kho chứa của bạn
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Thư mục chứa website đã hoàn thiện cần được deploy
           publish_dir: ./dist
